@@ -15,12 +15,17 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ceodev18.listdata.R
+import com.ceodev18.listdata.data.entities.Hit
 import com.ceodev18.listdata.databinding.HitsFragmentBinding
 import com.ceodev18.listdata.utils.Resource
 import com.ceodev18.listdata.utils.animation.SwipeToDeleteCallback
 import com.example.rickandmorty.utils.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
 
 
 @AndroidEntryPoint
@@ -50,10 +55,16 @@ class HitsFragment : Fragment(), HitsAdapter.HitItemListener {
         binding.hitsRv.layoutManager = LinearLayoutManager(requireContext())
         binding.hitsRv.adapter = adapter
 
-        val swipeHandler = object : SwipeToDeleteCallback(this!!.requireContext()) {
+        val swipeHandler = object : SwipeToDeleteCallback(this.requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = binding.hitsRv.adapter as HitsAdapter
+                val hit = adapter.getHit(viewHolder.adapterPosition)
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.deleteHit(hit)
+
+                }
                 adapter.removeAt(viewHolder.adapterPosition)
+
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeHandler)
@@ -62,7 +73,7 @@ class HitsFragment : Fragment(), HitsAdapter.HitItemListener {
     }
 
     private fun setupObservers() {
-        viewModel.hits.observe(viewLifecycleOwner, Observer {
+        viewModel.hits.observe(viewLifecycleOwner, Observer { it ->
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     binding.progressBar.visibility = View.GONE
@@ -77,16 +88,24 @@ class HitsFragment : Fragment(), HitsAdapter.HitItemListener {
         })
     }
 
-    override fun onClickedHit(hitId: Int) {
-        findNavController().navigate(
-            R.id.action_hitsFragment_to_hitDetailFragment,
-            bundleOf("id" to hitId)
-        )
+    override fun onClickedHit(hit: Hit) {
+        if (hit.story_url != null) {
+            findNavController().navigate(
+                R.id.action_hitsFragment_to_hitDetailFragment,
+                bundleOf("story_url" to hit.story_url)
+            )
+        } else {
+            val toast = Toast.makeText(context, R.string.not_story_url, Toast.LENGTH_SHORT)
+            toast.show()
+        }
+
     }
-    private fun setActions(){
+
+    private fun setActions() {
         binding.swipe.setOnRefreshListener { clear() }
     }
-    private fun clear(){
+
+    private fun clear() {
         binding.swipe.isRefreshing = false
     }
 }

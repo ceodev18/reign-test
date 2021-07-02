@@ -13,7 +13,7 @@ import com.ceodev18.listdata.databinding.ItemHitBinding
 class HitsAdapter(private val listener: HitItemListener) : RecyclerView.Adapter<HitViewHolder>() {
 
     interface HitItemListener {
-        fun onClickedHit(hitId: Int)
+        fun onClickedHit(hit: Hit)
     }
 
     private val items = ArrayList<Hit>()
@@ -25,21 +25,31 @@ class HitsAdapter(private val listener: HitItemListener) : RecyclerView.Adapter<
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HitViewHolder {
-        val binding: ItemHitBinding = ItemHitBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding: ItemHitBinding =
+            ItemHitBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return HitViewHolder(binding, listener)
     }
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: HitViewHolder, position: Int) = holder.bind(items[position])
+    override fun onBindViewHolder(holder: HitViewHolder, position: Int) =
+        holder.bind(items[position])
 
     fun removeAt(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)
+
+    }
+
+    fun getHit(position: Int): Hit {
+        return items[position]
     }
 }
 
-class HitViewHolder(private val itemBinding: ItemHitBinding, private val listener: HitsAdapter.HitItemListener) : RecyclerView.ViewHolder(itemBinding.root),
+class HitViewHolder(
+    private val itemBinding: ItemHitBinding,
+    private val listener: HitsAdapter.HitItemListener
+) : RecyclerView.ViewHolder(itemBinding.root),
     View.OnClickListener {
 
     private lateinit var hit: Hit
@@ -56,7 +66,8 @@ class HitViewHolder(private val itemBinding: ItemHitBinding, private val listene
     }
 
     override fun onClick(v: View?) {
-        listener.onClickedHit(hit.id)
+
+        listener.onClickedHit(hit)
     }
 
 }

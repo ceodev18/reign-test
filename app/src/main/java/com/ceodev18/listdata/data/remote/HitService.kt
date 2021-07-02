@@ -7,8 +7,5 @@ import retrofit2.http.Path
 
 interface HitService {
     @GET("search_by_date?query=mobile")
-    suspend fun getAllHits() : Response<Content>
-
-    //@GET("character/{id}")
-    //suspend fun getCharacter(@Path("id") id: Int): Response<Character>
+    suspend fun getAllHits(): Response<Content>
 }

@@ -1,5 +1,6 @@
 package com.ceodev18.listdata.data.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -9,9 +10,10 @@ import androidx.room.PrimaryKey
 data class Hit(
         val created_at: String?,
         val title: String?,
-        @PrimaryKey(autoGenerate = true) val id: Int,
+        @PrimaryKey(autoGenerate = false) val objectID: Int,
         val url: String?,
+        val story_url: String?,
         val author: String?,
         val story_title: String?,
-        val status: Int = 1
+        @ColumnInfo(name = "status", defaultValue = "1")val status: Int?
 )
