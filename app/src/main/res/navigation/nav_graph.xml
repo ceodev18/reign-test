@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/hitsFragment">
+
+    <fragment
+        android:id="@+id/hitsFragment"
+        android:name="com.ceodev18.listdata.ui.hits.HitsFragment"
+        android:label="Hits"
+        tools:layout="@layout/hits_fragment" >
+        <action
+            android:id="@+id/action_hitsFragment_to_hitDetailFragment"
+            app:destination="@id/hitDetailFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/hitDetailFragment"
+        android:name="com.ceodev18.listdata.ui.hitdetails.HitDetailFragment"
+        android:label="Hit Detail"
+        tools:layout="@layout/hit_detail_fragment" />
+</navigation>
