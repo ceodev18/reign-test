@@ -18,3 +18,13 @@ A simple app that loads information from an API REST to show one approach to usi
  * Room
  * Navigation
  
+ 
+* Third party
+  * [Kotlin Coroutines][91] for managing background threads with simplified code
+     and reducing needs for callbacks.
+  * [Dagger 2][92] A fast dependency injector.
+  * [Retrofit 2][93] A configurable REST client.
+  * [OkHttp 3][94] A type-safe HTTP client.
+  * [GSON][95] A Json - Object converter using reflection.
+  * [Timber][96] A logger.
+ 
