@@ -1,6 +1,5 @@
 package com.ceodev18.listdata.ui.hits
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,13 +18,12 @@ import com.ceodev18.listdata.data.entities.Hit
 import com.ceodev18.listdata.databinding.HitsFragmentBinding
 import com.ceodev18.listdata.utils.Resource
 import com.ceodev18.listdata.utils.animation.SwipeToDeleteCallback
+
 import com.example.rickandmorty.utils.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.doAsync
 
 
 @AndroidEntryPoint
@@ -34,6 +32,7 @@ class HitsFragment : Fragment(), HitsAdapter.HitItemListener {
     private var binding: HitsFragmentBinding by autoCleared()
     private val viewModel: HitViewModel by viewModels()
     private lateinit var adapter: HitsAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,8 +59,7 @@ class HitsFragment : Fragment(), HitsAdapter.HitItemListener {
                 val adapter = binding.hitsRv.adapter as HitsAdapter
                 val hit = adapter.getHit(viewHolder.adapterPosition)
                 CoroutineScope(Dispatchers.IO).launch {
-                    viewModel.deleteHit(hit)
-
+                    viewModel.remove(hit.objectID)
                 }
                 adapter.removeAt(viewHolder.adapterPosition)
 
@@ -106,6 +104,23 @@ class HitsFragment : Fragment(), HitsAdapter.HitItemListener {
     }
 
     private fun clear() {
+
+        viewModel.hitsUpdate.observe(viewLifecycleOwner, Observer { it ->
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    binding.progressBar.visibility = View.GONE
+                    if (!it.data.isNullOrEmpty()) adapter.setItems(ArrayList(it.data))
+                    viewModel.hitsUpdate.removeObservers(this)
+                }
+                Resource.Status.ERROR ->
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+
+                Resource.Status.LOADING ->
+                    binding.progressBar.visibility = View.VISIBLE
+            }
+        })
         binding.swipe.isRefreshing = false
+
+
     }
 }

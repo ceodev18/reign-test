@@ -9,8 +9,14 @@ class HitViewModel @ViewModelInject constructor(
     private val repository: HitRepository
 ) : ViewModel() {
     val hits = repository.getHits()
+    val hitsUpdate = repository.getHits()
 
     fun deleteHit(hit: Hit) {
         repository.deleteHit(hit)
     }
+    fun remove(id: Int) {
+        repository.softDelete(id)
+    }
+
+
 }

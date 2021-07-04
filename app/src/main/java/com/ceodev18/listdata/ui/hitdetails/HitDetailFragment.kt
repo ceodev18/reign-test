@@ -41,7 +41,7 @@ class HitDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.getString("story_url")?.let { /*viewModel.start(it)*/
+        arguments?.getString("story_url")?.let {
             loadPage(it)
         }
     }
