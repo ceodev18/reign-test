@@ -20,11 +20,27 @@ A simple app that loads information from an API REST to show one approach to usi
  
  
 * Third party
-  * [Kotlin Coroutines][91] for managing background threads with simplified code
+  * [Kotlin Coroutines] for managing background threads with simplified code
      and reducing needs for callbacks.
-  * [Dagger 2][92] A fast dependency injector.
-  * [Retrofit 2][93] A configurable REST client.
-  * [OkHttp 3][94] A type-safe HTTP client.
-  * [GSON][95] A Json - Object converter using reflection.
-  * [Timber][96] A logger.
+  * [Dagger 2] A fast dependency injector.
+  * [Retrofit 2] A configurable REST client.
+  * [OkHttp 3 A type-safe HTTP client.
+  * [GSON] A Json - Object converter using reflection.
+  * [Timber] A logger.
+ 
+ 
+ 1st Use Case
+-----------------------------------
+* Open the app and fetch all data
+* Swipe left to delete item
+* Close app and turn on airplain mode (network of)
+* See all availables except deleted
+
+2nd Use Case
+-----------------------------------
+* Change airplane mode to network of wifi
+* Swipe down to refresh
+* Close app and turn on airplain mode (network of)
+* After Swipe new data will laoded and deleted still not showing
+
  
